@@ -1,6 +1,8 @@
 .idea
 *.iml
 out
+/.idea/uiDesigner.xml
+/.idea/libraries/Maven__junit_junit_4_8_2.xml
 gen
 
 # Byte-compiled / optimized / DLL files
