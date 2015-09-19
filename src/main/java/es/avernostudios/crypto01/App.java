@@ -14,20 +14,37 @@ public class App
         BigInteger result = BigInteger.ZERO;
 
         int b = 1048576;
-        BigInteger gPowB = g.pow(b);
 
-        BigInteger x0=BigInteger.ZERO,x1=BigInteger.ZERO;
+        BigInteger x0=BigInteger.ZERO,x1=BigInteger.ZERO, hashAccumulator = BigInteger.ONE;
 
         Vector<BigInteger> leftSide = new Vector<BigInteger>();
-        for(int i=0;i < b;i++){
-            leftSide.add(calculateLeftSide(g,h,i));
+
+        leftSide.add(h.multiply(hashAccumulator.modInverse(p)).mod(p));
+        for(int i=1;i < b;i++){
+
+            hashAccumulator = g.multiply(hashAccumulator).mod(p);
+
+            BigInteger val = h.multiply(hashAccumulator.modInverse(p)).mod(p);
+            leftSide.add(val);
         }
 
+        BigInteger GB = g.modPow(BigInteger.valueOf(b), p);
+
+        BigInteger rightSide = BigInteger.ONE;
         for(int i=0;i < b;i++){
-            BigInteger rightSide = calculateRightSide(gPowB, i);
+
+            if (i%100==0){
+                System.out.println(".");
+            }
+            if(i != 0) {
+                rightSide = rightSide.multiply(GB).mod(p);
+            }
+
+
             if(leftSide.contains(rightSide)){
                 x0=BigInteger.valueOf(i);
                 x1=BigInteger.valueOf(leftSide.indexOf(rightSide));
+                break;
             }
         }
 
